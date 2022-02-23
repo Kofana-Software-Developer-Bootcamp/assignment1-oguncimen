@@ -1,23 +1,130 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import Button from "react-bootstrap/Button";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Formik
+        initialValues={{
+          email: "",
+          name: "",
+          surname: "",
+          phoneNumber: "",
+          birthday: "",
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          const user = {
+            email: values.email,
+            name: values.name,
+            surname: values.surname,
+            phoneNumber: values.phoneNumber,
+            birthday: values.birthday,
+          };
+
+          //Önceki verileri localStorage'tan çekiyoruz.
+          const users = localStorage.getItem("users");
+          //Eğer localStorage'ta veri yoksa boş bir dizi oluşturuyoruz.
+          if (users) {
+            //Eğer localStorage'ta veri varsa, diziye atıyoruz.
+            const parsedUsers = JSON.parse(users);
+            //Diziye yeni veri ekliyoruz.
+            parsedUsers.push(user);
+            //Yeni Diziyi localStorage'a yazıyoruz.
+            localStorage.setItem("users", JSON.stringify(parsedUsers));
+          }
+          //Eğer localStorage boş ise, ilk veriyi ekliyoruz.
+          else {
+            localStorage.setItem("users", JSON.stringify(user));
+          }
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.email) {
+            errors.email = "Email is required";
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+          ) {
+            errors.email = "Invalid email address";
+          }
+          if (!values.name) {
+            errors.name = "Name is required";
+          }
+          if (!values.surname) {
+            errors.surname = "Surname is required";
+          }
+          if (!values.phoneNumber) {
+            errors.phoneNumber = "Phone number is required";
+          }
+          if (!values.birthday) {
+            errors.birthday = "Birthday is required";
+          }
+          return errors;
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form className="Form">
+            <p className="formHeader">Koform</p>
+            <Field
+              className="formText"
+              type="text"
+              name="email"
+              placeholder="Email"           
+            />
+            <ErrorMessage className="errorMessage" name="email" component="div" />
+            <Field
+              className="formText"
+              type="text"
+              name="name"
+              placeholder="Name"
+            />
+            <ErrorMessage className="errorMessage" name="name" component="div" />
+            <Field
+              className="formText"
+              type="text"
+              name="surname"
+              placeholder="Surname"
+            />
+            <ErrorMessage className="errorMessage" name="surname" component="div" />
+            <Field
+              className="formText"
+              type="text"
+              name="phoneNumber"
+              placeholder="Phone"
+            />
+            <ErrorMessage className="errorMessage" name="phoneNumber" component="div" />
+            <Field
+              className="formText"
+              type="date"
+              name="birthday"
+              placeholder="Birthday"
+            />
+            <ErrorMessage className="errorMessage" name="birthday" component="div" />
+            <div className="buttonContainer">
+              <Button
+                style={{ color: "white" }}
+                className="formButton"
+                variant="warning"
+                type="submit"
+              >
+                Register
+              </Button>
+              <Button
+                className="formButton"
+                style={{ color: "white" }}
+                onClick={() => {
+                  const users = JSON.parse(localStorage.getItem("users"));
+                  console.log(users);
+                }}
+                variant="warning"
+              >
+                Show Users
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 }
