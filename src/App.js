@@ -23,9 +23,8 @@ function App() {
             birthday: values.birthday,
           };
 
-          var users = [];
           //If local storage is empty, create new array
-          users = localStorage.getItem("users")
+          var users = localStorage.getItem("users")
             ? JSON.parse(localStorage.getItem("users"))
             : [];
           //Add new user to array
