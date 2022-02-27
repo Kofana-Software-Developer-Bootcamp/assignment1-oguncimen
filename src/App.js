@@ -23,21 +23,16 @@ function App() {
             birthday: values.birthday,
           };
 
-          //Önceki verileri localStorage'tan çekiyoruz.
-          const users = localStorage.getItem("users");
-          //Eğer localStorage'ta veri yoksa boş bir dizi oluşturuyoruz.
-          if (users) {
-            //Eğer localStorage'ta veri varsa, diziye atıyoruz.
-            const parsedUsers = JSON.parse(users);
-            //Diziye yeni veri ekliyoruz.
-            parsedUsers.push(user);
-            //Yeni Diziyi localStorage'a yazıyoruz.
-            localStorage.setItem("users", JSON.stringify(parsedUsers));
-          }
-          //Eğer localStorage boş ise, ilk veriyi ekliyoruz.
-          else {
-            localStorage.setItem("users", JSON.stringify(user));
-          }
+          var users = [];
+          //If local storage is empty, create new array
+          users = localStorage.getItem("users")
+            ? JSON.parse(localStorage.getItem("users"))
+            : [];
+          //Add new user to array
+          users.push(user);
+          //Save array to local storage
+          localStorage.setItem("users", JSON.stringify(users));
+          alert("User added successfully!");
         }}
         validate={(values) => {
           const errors = {};
@@ -70,37 +65,57 @@ function App() {
               className="formText"
               type="text"
               name="email"
-              placeholder="Email"           
+              placeholder="Email"
             />
-            <ErrorMessage className="errorMessage" name="email" component="div" />
+            <ErrorMessage
+              className="errorMessage"
+              name="email"
+              component="div"
+            />
             <Field
               className="formText"
               type="text"
               name="name"
               placeholder="Name"
             />
-            <ErrorMessage className="errorMessage" name="name" component="div" />
+            <ErrorMessage
+              className="errorMessage"
+              name="name"
+              component="div"
+            />
             <Field
               className="formText"
               type="text"
               name="surname"
               placeholder="Surname"
             />
-            <ErrorMessage className="errorMessage" name="surname" component="div" />
+            <ErrorMessage
+              className="errorMessage"
+              name="surname"
+              component="div"
+            />
             <Field
               className="formText"
               type="text"
               name="phoneNumber"
               placeholder="Phone"
             />
-            <ErrorMessage className="errorMessage" name="phoneNumber" component="div" />
+            <ErrorMessage
+              className="errorMessage"
+              name="phoneNumber"
+              component="div"
+            />
             <Field
               className="formText"
               type="date"
               name="birthday"
               placeholder="Birthday"
             />
-            <ErrorMessage className="errorMessage" name="birthday" component="div" />
+            <ErrorMessage
+              className="errorMessage"
+              name="birthday"
+              component="div"
+            />
             <div className="buttonContainer">
               <Button
                 style={{ color: "white" }}
